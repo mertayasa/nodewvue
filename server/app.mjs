@@ -4,8 +4,6 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 
 // Import Router
-import HomeRouter from './routes/HomeRouter.mjs'
-import ArticleRouter from './routes/ArticleRouter.mjs'
 import AuthRouter from './routes/AuthRouter.mjs'
 import ApiRouter from './routes/ApiRouter.mjs'
 
@@ -21,17 +19,10 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => app.listen(port))
 	.catch(err => console.log(err))
 
-// Middleware & View Engine
-app.set('view engine', 'ejs')
+// Middleware
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-
-// Use Router
-app.use(AuthRouter)
-app.use(HomeRouter)
-app.use('/article', ArticleRouter)
-
 
 // API
 app.use((req, res, next) => {
@@ -40,10 +31,13 @@ app.use((req, res, next) => {
 });
 
 app.use('/api', ApiRouter)
+app.use('/auth', AuthRouter)
 
 // 404 Not Found
 app.use((req, res, next) => {
-	res.send('<h1> Page not found </h1>')
+	res.send({
+		message: 'Not Found'
+	}, 404)
 })
 
 
