@@ -7,6 +7,7 @@ import bodyParser from 'body-parser'
 import HomeRouter from './routes/HomeRouter.mjs'
 import ArticleRouter from './routes/ArticleRouter.mjs'
 import AuthRouter from './routes/AuthRouter.mjs'
+import ApiRouter from './routes/ApiRouter.mjs'
 
 global.myvar = 100;
 
@@ -17,8 +18,8 @@ const dbURI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}
 
 // Connect to MongoDB
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-        .then(() => app.listen(port))
-        .catch(err => console.log(err))
+	.then(() => app.listen(port))
+	.catch(err => console.log(err))
 
 // Middleware & View Engine
 app.set('view engine', 'ejs')
@@ -31,9 +32,18 @@ app.use(AuthRouter)
 app.use(HomeRouter)
 app.use('/article', ArticleRouter)
 
+
+// API
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
+	next();
+});
+
+app.use('/api', ApiRouter)
+
 // 404 Not Found
-app.use((req, res,next) =>{
-  res.send('<h1> Page not found </h1>')
+app.use((req, res, next) => {
+	res.send('<h1> Page not found </h1>')
 })
 
 

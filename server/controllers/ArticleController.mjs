@@ -1,4 +1,5 @@
 import Article from "../models/Article.mjs"
+import User from "../models/User.mjs"
 import fs from 'fs'
 
 const index = (req, res) => {
@@ -8,21 +9,21 @@ const index = (req, res) => {
                 ...article._doc,
                 thumbnail: article.thumbnail ? article.thumbnail : "/images/logo.png",
                 createdAt: article._doc.createdAt.toDateString(),
-            }));
+            }))
 
             const data = {
                 title: "Article Page",
                 articles: modifiedArticles,
-            };
+            }
 
-            res.render("article/index", data);
+            res.render("article/index", data)
         })
-        .catch(err => res.send(err));
+        .catch(err => res.send(err))
 }
 
 const paginate = (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 2;
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 2
 
     Article.find()
         .skip((page - 1) * limit)
@@ -44,15 +45,19 @@ const paginate = (req, res) => {
                 })
             })
         })
-        .catch(err => res.send(err));
+        .catch(err => res.send(err))
 }
 
-const create = (req, res) => {
+const create = async(req, res) => {
     const data = {
         title: "Create Article Page",
-    };
+    }
 
-    res.render("article/create", data);
+    const users = await User.find({}, 'name id')
+
+    return res.json(users)
+
+    res.render("article/create", data)
 }
 
 const store = (req, res) => {
@@ -71,7 +76,7 @@ const store = (req, res) => {
     article.save()
         .then(() => res.json({code: 1}))
         .catch(err => {
-            console.log(err);
+            console.log(err)
             res.json({code: 0, message: err.message})
         })
 }
@@ -81,7 +86,7 @@ const find = (req, res) => {
         .then(article => {
             res.json({code: 1, article: article})
         })
-        .catch(err => res.send({code: 0, message: err.message}));
+        .catch(err => res.send({code: 0, message: err.message}))
 }
 
 const edit = (req, res) => {
@@ -90,11 +95,11 @@ const edit = (req, res) => {
             const data = {
                 title: "Edit Article Page",
                 article: article,
-            };
+            }
 
-            res.render("article/edit", data);
+            res.render("article/edit", data)
         })
-        .catch(err => res.send(err));
+        .catch(err => res.send(err))
 }
 
 const update = (req, res) => {
@@ -111,7 +116,7 @@ const update = (req, res) => {
         .then(article => {
             if(article.thumbnail) {
                 console.log('../public' + article.thumbnail)
-                fs.unlink('./public' + article.thumbnail);
+                fs.unlink('./public' + article.thumbnail)
             }
         })
     }
@@ -119,7 +124,7 @@ const update = (req, res) => {
     Article.findByIdAndUpdate(req.params.id, articleData)
     .then(() => res.json({code: 1}))
     .catch(err => {
-        console.log(err);
+        console.log(err)
         res.json({code: 0, message: err.message})
     })
 }
@@ -128,7 +133,7 @@ const destroy = (req, res) => {
     Article.findByIdAndDelete(req.params.id)
         .then(() => res.json({code: 1}))
         .catch(err => {
-            console.log(err);
+            console.log(err)
             res.json({code: 0, message: err.message})
         })
 }
