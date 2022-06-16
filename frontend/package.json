@@ -12,9 +12,13 @@
   },
   "dependencies": {
     "bootstrap": "^5.2.0-beta1",
+    "node-sass": "^7.0.1",
     "pinia": "^2.0.14",
     "vue": "^3.2.36",
-    "vue-router": "^4.0.15"
+    "vue-loading-overlay": "^5.0.3",
+    "vue-router": "^4.0.15",
+    "vue-spinners": "^1.0.2",
+    "vue3-loading-overlay": "^0.0.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",

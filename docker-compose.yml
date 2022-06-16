@@ -1,0 +1,23 @@
+version: '2'
+services:
+  base:
+    image: node:16
+    volumes:
+      - ./server:/usr/src/service/
+    working_dir: /usr/src/service/
+    restart: unless-stopped
+    stdin_open: true
+    container_name: nodeserver
+    ports:
+      - 8083:3000
+  
+  front:
+    image: node:16
+    volumes:
+      - ./frontend:/usr/src/frontend/
+    working_dir: /usr/src/frontend/
+    restart: unless-stopped
+    stdin_open: true
+    container_name: nodefront
+    ports:
+      - 8082:8082
