@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   base:
     image: node:16
@@ -6,7 +6,7 @@ services:
       - ./server:/usr/src/service/
     working_dir: /usr/src/service/
     restart: unless-stopped
-    stdin_open: true
+    stdin_open: true # Used to allow the container to be executed with a tty (docker exec)
     container_name: nodeserver
     ports:
       - 8083:3000
@@ -17,7 +17,7 @@ services:
       - ./frontend:/usr/src/frontend/
     working_dir: /usr/src/frontend/
     restart: unless-stopped
-    stdin_open: true
+    stdin_open: true # Used to allow the container to be executed with a tty (docker exec)
     container_name: nodefront
     ports:
       - 8082:8082
